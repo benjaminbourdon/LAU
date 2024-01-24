@@ -1,18 +1,19 @@
-import type { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'LAU',
-  description: '',
-}
+import Banner from "@/components/Banner";
+import { Providers } from "./providers";
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="fr">
-      <body>{children}</body>
+      <body>
+        <Providers>
+          <Banner />
+          {children}
+        </Providers>
+      </body>
     </html>
-  )
+  );
 }
