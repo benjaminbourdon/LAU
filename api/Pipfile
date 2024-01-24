@@ -8,6 +8,8 @@ fastapi = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 
 [dev-packages]
+pytest = "*"
+fastapi = {extras = ["all"], version = "*"}
 
 [requires]
 python_version = "3.12"
