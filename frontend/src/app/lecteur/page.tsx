@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      <h1>Accueil</h1>
-      {/* <InterractivePlayer /> */}
+      <h1>Lecteur augmenté</h1>
+      <InterractivePlayer />
     </>
   );
 }
