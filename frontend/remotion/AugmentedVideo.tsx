@@ -40,7 +40,7 @@ export const AugmentedVideo: React.FC<z.infer<typeof myCompSchema>> = ({
     <AbsoluteFill style={{ backgroundColor: "grey" }}>
       <AbsoluteFill style={{ opacity }}>
         <AbsoluteFill>
-          <Video src={urlVideo} />
+          <Video src={urlVideo} disablePictureInPicture />
         </AbsoluteFill>
 
         <Sequence from={35}>
