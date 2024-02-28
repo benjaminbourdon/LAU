@@ -3,10 +3,10 @@ from typing import Annotated
 
 from dotenv import load_dotenv
 from fastapi import Depends
-from pymongo import MongoClient
-from pymongo.client_session import ClientSession
-from pymongo.collection import Collection
-from pymongo.database import Database
+from motor.motor_asyncio import AsyncIOMotorClient as MongoClient
+from motor.motor_asyncio import AsyncIOMotorClientSession as ClientSession
+from motor.motor_asyncio import AsyncIOMotorCollection as Collection
+from motor.motor_asyncio import AsyncIOMotorDatabase as Database
 
 load_dotenv()
 MONGOBD_URI = os.getenv("MONGODB_URI")
@@ -43,14 +43,14 @@ def get_mongo_collection(
 CollectionDep = Annotated[Collection, Depends(get_mongo_collection)]
 
 
-def get_mongo_session(
+async def get_mongo_session(
     mongo_client: MongoClientDep,
 ):
-    session = mongo_client.start_session()
+    session = await mongo_client.start_session()
     try:
         yield session
     finally:
-        session.end_session()
+        await session.end_session()
 
 
 SessionDep = Annotated[ClientSession, Depends(get_mongo_session)]

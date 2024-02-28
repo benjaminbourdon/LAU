@@ -1,6 +1,6 @@
 """Tests fixtures."""
 import pytest
-from fastapi.testclient import TestClient
+from httpx import AsyncClient
 
 from src.dependencies import db
 from src.main import app
@@ -17,7 +17,14 @@ def get_test_mongo_database(
     mongo_client.drop_database(test_database)
 
 
+@pytest.fixture(scope="session")
+def anyio_backend():
+    return "asyncio"
+
+
 @pytest.fixture(scope="session", autouse=True)
-def fastapi_client():
+async def async_fastapi_client(anyio_backend):
     app.dependency_overrides[db.get_mongo_database] = get_test_mongo_database
-    yield TestClient(app)
+    client = AsyncClient(app=app, base_url="http://testserver")
+    yield client
+    await client.aclose()
