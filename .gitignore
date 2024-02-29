@@ -1,4 +1,5 @@
 .*_cache
 .vscode
+.env*.local
 .env
 __pycache__
