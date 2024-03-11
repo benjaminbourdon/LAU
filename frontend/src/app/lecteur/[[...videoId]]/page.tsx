@@ -6,7 +6,11 @@ export const metadata: Metadata = {
   description: "",
 };
 
-export default function Home() {
+export default function Page({ params }: { params: { videoId?: string[] } }) {
+  if (params.videoId) {
+    // Recup les infos sur la video
+  }
+
   return (
     <>
       <h1>Lecteur augmenté</h1>
