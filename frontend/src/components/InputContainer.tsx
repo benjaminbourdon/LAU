@@ -7,10 +7,11 @@ const inputContainer: React.CSSProperties = {
   backgroundColor: "var(--background)",
   display: "flex",
   flexDirection: "column",
+  width: "60%",
 };
 
 export const InputContainer: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  return <div style={inputContainer}>{children}</div>;
+  return <form style={inputContainer}>{children}</form>;
 };
