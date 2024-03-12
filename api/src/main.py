@@ -1,5 +1,5 @@
 import os
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 import uvicorn
 from dotenv import load_dotenv
@@ -35,6 +35,14 @@ async def create_video(
     document = VideoDB(**new_video.model_dump(), perma_token=str(uuid4()))
     await collection.insert_one(document.model_dump(), session=session)
     return document
+
+
+@app.get("/video/{perma_token}")
+async def read_video(
+    collection: CollectionDep, session: SessionDep, perma_token: UUID
+) -> VideoOut:
+    res = await collection.find_one({"perma_token": str(perma_token)})
+    return VideoDB(**res)
 
 
 if __name__ == "__main__":
