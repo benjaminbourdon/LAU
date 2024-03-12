@@ -4,20 +4,39 @@ import { ActionButton } from "@/components/ActionButton";
 import { Input } from "@/components/Input";
 import { InputContainer } from "@/components/InputContainer";
 import { AugmentedVideo } from "../../remotion/AugmentedVideo";
+import { useParams, useRouter } from "next/navigation";
 
 import { Player, PlayerRef } from "@remotion/player";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { TimeDisplay } from "../../remotion/TimeDisplay";
-import { useCurrentPlayerFrame } from "../../remotion/use-current-player-frame";
 
 export default function InterractivePlayer() {
+  const router = useRouter();
+  const { videoId } = useParams<{ videoId?: string }>();
   const [title, setTitle] = useState<string>("Titre match");
-
-  const playerRef = useRef<PlayerRef>(null);
-
   const urlSample =
     "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
   const [urlVideo, setUrlVideo] = useState<string>(urlSample);
+  const playerRef = useRef<PlayerRef>(null);
+
+  useEffect(() => {
+    async function sync_video_data(video_uuid: string) {
+      const res = await fetch(
+        process.env.NEXT_PUBLIC_API_BASEURL + "/video/" + video_uuid,
+      );
+      const data = await res.json();
+      if (res.status == 200) {
+        setTitle(data.title);
+        setUrlVideo(data.src);
+      } else {
+        router.replace("/lecteur");
+        // Error message
+      }
+    }
+    if (videoId) {
+      sync_video_data(videoId);
+    }
+  }, [videoId]);
 
   const handleClick: React.MouseEventHandler = async () => {
     const data = { title: title, src: urlVideo };
@@ -28,7 +47,8 @@ export default function InterractivePlayer() {
       },
       body: JSON.stringify(data),
     });
-    console.log(await res.json());
+    const data_published = await res.json();
+    router.push("/lecteur/" + data_published.perma_token);
   };
 
   return (
