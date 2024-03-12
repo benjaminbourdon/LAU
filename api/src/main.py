@@ -41,8 +41,23 @@ async def create_video(
 async def read_video(
     collection: CollectionDep, session: SessionDep, perma_token: UUID
 ) -> VideoOut:
-    res = await collection.find_one({"perma_token": str(perma_token)})
-    return VideoDB(**res)
+    res = await collection.find_one({"perma_token": str(perma_token)}, session=session)
+    return VideoOut(**res)
+
+
+@app.put("/video/{perma_token}")
+async def replace_video(
+    collection: CollectionDep,
+    session: SessionDep,
+    perma_token: UUID,
+    updated_video: VideoIn,
+) -> int:
+    res = await collection.update_one(
+        {"perma_token": str(perma_token)},
+        {"$set": {**updated_video.model_dump()}},
+        session=session,
+    )
+    return res.modified_count
 
 
 if __name__ == "__main__":

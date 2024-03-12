@@ -39,16 +39,21 @@ export default function InterractivePlayer() {
   }, [videoId]);
 
   const handleClick: React.MouseEventHandler = async () => {
+    const method = videoId ? "PUT" : "POST";
+    const entrypoint = videoId ? "/video/" + videoId : "/video";
     const data = { title: title, src: urlVideo };
-    const res = await fetch(process.env.NEXT_PUBLIC_API_BASEURL + "/video", {
-      method: "POST",
+    const res = await fetch(process.env.NEXT_PUBLIC_API_BASEURL + entrypoint, {
+      method: method,
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
-    const data_published = await res.json();
-    router.push("/lecteur/" + data_published.perma_token);
+
+    if (!videoId) {
+      const data_published = await res.json();
+      router.push("/lecteur/" + data_published.perma_token);
+    }
   };
 
   return (
