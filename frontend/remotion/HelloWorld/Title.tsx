@@ -42,7 +42,7 @@ export const Title: React.FC<{
 
         return (
           <span
-            key={t}
+            key={t + i.toString()}
             style={{
               ...word,
               color: titleColor,
