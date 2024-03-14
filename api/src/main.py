@@ -23,12 +23,7 @@ app.add_middleware(
 )
 
 
-@app.get("/")
-async def read_root():
-    return {"Hello": "World"}
-
-
-@app.post("/video", response_model_exclude_unset=True)
+@app.post("/video", response_model_exclude_unset=True, tags=["video"])
 async def create_video(
     collection: CollectionDep, session: SessionDep, new_video: VideoIn
 ) -> VideoOut:
@@ -37,7 +32,7 @@ async def create_video(
     return document
 
 
-@app.get("/video/{perma_token}")
+@app.get("/video/{perma_token}", tags=["video"])
 async def read_video(
     collection: CollectionDep, session: SessionDep, perma_token: UUID
 ) -> VideoOut:
@@ -45,7 +40,7 @@ async def read_video(
     return VideoOut(**res)
 
 
-@app.put("/video/{perma_token}")
+@app.put("/video/{perma_token}", tags=["video"])
 async def replace_video(
     collection: CollectionDep,
     session: SessionDep,

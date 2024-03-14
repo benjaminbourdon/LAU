@@ -9,6 +9,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Player, PlayerRef } from "@remotion/player";
 import React, { useRef, useState, useEffect } from "react";
 import { TimeDisplay } from "../../remotion/TimeDisplay";
+import { ApiError, VideoService } from "../client";
 
 export default function InterractivePlayer() {
   const router = useRouter();
@@ -21,16 +22,16 @@ export default function InterractivePlayer() {
 
   useEffect(() => {
     async function sync_video_data(video_uuid: string) {
-      const res = await fetch(
-        process.env.NEXT_PUBLIC_API_BASEURL + "/video/" + video_uuid,
-      );
-      const data = await res.json();
-      if (res.status == 200) {
-        setTitle(data.title);
-        setUrlVideo(data.src);
-      } else {
+      try {
+        const response = await VideoService.readVideoGet({
+          permaToken: video_uuid,
+        });
+        if (response.title) {
+          setTitle(response.title);
+        }
+        setUrlVideo(response.src);
+      } catch (error) {
         router.replace("/lecteur");
-        // Error message
       }
     }
     if (videoId) {
