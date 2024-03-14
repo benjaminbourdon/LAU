@@ -7,7 +7,7 @@ import {
   useVideoConfig,
   Video,
 } from "remotion";
-import { Title } from "./HelloWorld/Title";
+import { Title } from "./Title";
 import { z } from "zod";
 import { zColor } from "@remotion/zod-types";
 
