@@ -7,21 +7,21 @@ import {
   useVideoConfig,
   Video,
 } from "remotion";
-import { Title } from "./Title";
+import Title from "./Title";
 import { z } from "zod";
 import { zColor } from "@remotion/zod-types";
 
-export const myCompSchema = z.object({
+export const videoMetadataSchema = z.object({
   titleText: z.string(),
   titleColor: zColor(),
   urlVideo: z.string(),
 });
 
-export const AugmentedVideo: React.FC<z.infer<typeof myCompSchema>> = ({
+export default function AugmentedVideo({
   titleText,
   titleColor,
   urlVideo,
-}) => {
+}: z.infer<typeof videoMetadataSchema>) {
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
 
@@ -49,4 +49,4 @@ export const AugmentedVideo: React.FC<z.infer<typeof myCompSchema>> = ({
       </AbsoluteFill>
     </AbsoluteFill>
   );
-};
+}

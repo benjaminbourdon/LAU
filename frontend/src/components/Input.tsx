@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { z } from "zod";
 
 const textarea: React.CSSProperties = {
   resize: "none",
@@ -12,10 +13,17 @@ const textarea: React.CSSProperties = {
   fontSize: 14,
 };
 
-export const Input: React.FC<{
-  text: string;
-  setText: React.Dispatch<React.SetStateAction<string>>;
-}> = ({ text, setText }) => {
+const TextInputSchema = z.string().min(1).trim();
+
+export type TextInputType = z.infer<typeof TextInputSchema>;
+
+export default function Input({
+  text,
+  setText,
+}: {
+  text: TextInputType;
+  setText: React.Dispatch<React.SetStateAction<TextInputType>>;
+}) {
   const onChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
       setText(e.currentTarget.value);
@@ -26,4 +34,4 @@ export const Input: React.FC<{
   return (
     <input name="title" style={textarea} value={text} onChange={onChange} />
   );
-};
+}

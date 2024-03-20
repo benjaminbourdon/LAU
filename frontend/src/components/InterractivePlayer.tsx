@@ -1,15 +1,15 @@
 "use client";
 
-import { ActionButton } from "@/components/ActionButton";
-import { Input } from "@/components/Input";
-import { InputContainer } from "@/components/InputContainer";
-import { AugmentedVideo } from "../../remotion/AugmentedVideo";
-import { useParams, useRouter } from "next/navigation";
-
+import ActionButton from "@/components/ActionButton";
+import Input from "@/components/Input";
+import InputContainer from "@/components/InputContainer";
 import { Player, PlayerRef } from "@remotion/player";
-import React, { useRef, useState, useEffect } from "react";
-import { TimeDisplay } from "../../remotion/TimeDisplay";
-import { ApiError, VideoService } from "../client";
+import { useParams, useRouter } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
+
+import AugmentedVideo from "../../remotion/AugmentedVideo";
+import TimeDisplay from "../../remotion/TimeDisplay";
+import { VideoService } from "../client";
 
 export default function InterractivePlayer() {
   const router = useRouter();

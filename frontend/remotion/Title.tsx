@@ -1,5 +1,6 @@
 import React from "react";
 import { spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { z } from "zod";
 
 const title: React.CSSProperties = {
   fontFamily: "Helvetica, Arial, sans-serif",
@@ -17,10 +18,15 @@ const word: React.CSSProperties = {
   display: "inline-block",
 };
 
-export const Title: React.FC<{
-  titleText: string;
-  titleColor: string;
-}> = ({ titleText, titleColor }) => {
+export const titleSchema = z.object({
+  titleText: z.string(),
+  titleColor: z.string(),
+});
+
+export default function Title({
+  titleText,
+  titleColor,
+}: z.infer<typeof titleSchema>) {
   const videoConfig = useVideoConfig();
   const frame = useCurrentFrame();
 
@@ -54,4 +60,4 @@ export const Title: React.FC<{
       })}
     </h1>
   );
-};
+}

@@ -10,8 +10,10 @@ const inputContainer: React.CSSProperties = {
   width: "60%",
 };
 
-export const InputContainer: React.FC<{
+export default function InputContainer({
+  children,
+}: {
   children: React.ReactNode;
-}> = ({ children }) => {
+}) {
   return <form style={inputContainer}>{children}</form>;
-};
+}
