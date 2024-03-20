@@ -1,6 +1,6 @@
 import React from "react";
 import { Composition } from "remotion";
-import { AugmentedVideo } from "./AugmentedVideo";
+import AugmentedVideo from "./AugmentedVideo";
 
 export const MyFirstVideo: React.FC = () => {
   return (
