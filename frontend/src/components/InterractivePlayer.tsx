@@ -5,41 +5,27 @@ import Input from "@/components/Input";
 import InputContainer from "@/components/InputContainer";
 import { Player, PlayerRef } from "@remotion/player";
 import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
 import AugmentedVideo from "../../remotion/AugmentedVideo";
 import TimeDisplay from "../../remotion/TimeDisplay";
-import { api } from "../client";
+import { api, schemas } from "../client";
+import { z } from "zod";
 
-export default function InterractivePlayer() {
+export default function InterractivePlayer({
+  initialData,
+}: {
+  initialData?: z.infer<typeof schemas.VideoOut>;
+}) {
   const router = useRouter();
   const { videoId } = useParams<{ videoId?: Array<string> }>();
-  const [title, setTitle] = useState<string>("Titre match");
-  const urlSample =
-    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
-  const [urlVideo, setUrlVideo] = useState<string>(urlSample);
+  const [title, setTitle] = useState<string>(
+    initialData?.title ? initialData.title : "Pas de titre par défaut",
+  );
+  const [urlVideo, setUrlVideo] = useState<string>(
+    initialData?.src ? initialData.src : "",
+  );
   const playerRef = useRef<PlayerRef>(null);
-
-  useEffect(() => {
-    async function sync_video_data(video_uuid: string) {
-      try {
-        const response = await api.ReadVideoGet({
-          params: {
-            perma_token: video_uuid,
-          },
-        });
-        if (response.title) {
-          setTitle(response.title);
-        }
-        setUrlVideo(response.src);
-      } catch (error) {
-        router.replace("/lecteur");
-      }
-    }
-    if (videoId) {
-      sync_video_data(videoId[0]);
-    }
-  }, [videoId]);
 
   const handleClick: React.MouseEventHandler = async () => {
     const data = { title: title, src: urlVideo };
@@ -49,7 +35,6 @@ export default function InterractivePlayer() {
       });
     } else {
       const res = await api.CreateVideoPost(data);
-      console.log(res.perma_token);
       router.push("/lecteur/" + res.perma_token);
     }
   };

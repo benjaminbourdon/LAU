@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate-client": "openapi-zod-client ..\\api\\openapi\\openapi_simplify.json -o .\\src\\client\\generated-client.ts"
+    "generate-client": "openapi-zod-client ..\\api\\openapi\\openapi_simplify.json -o .\\src\\client\\generated-client.ts -p .\\.prettierrc --export-schemas --with-description"
   },
   "dependencies": {
     "@nextui-org/react": "^2.2.9",
