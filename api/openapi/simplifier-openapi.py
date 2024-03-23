@@ -12,7 +12,10 @@ for path_data in openapi_content["paths"].values():
         operation_id = operation["operationId"]
         separator = f"_{tag}_"
         pieces = str(operation_id).rsplit(separator, maxsplit=1)
-        new_operation_id = pieces[0] + "_" + str(http_verb)
+        new_operation_id = (
+            "".join(map(lambda x: x.capitalize(), pieces[0].split("_")))
+            + str(http_verb).capitalize()
+        )
         operation["operationId"] = new_operation_id
 
 
