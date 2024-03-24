@@ -8,7 +8,7 @@ import { useParams, useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
 
 import AugmentedVideo from "../../remotion/AugmentedVideo";
-import TimeDisplay from "../../remotion/TimeDisplay";
+import TimeDisplay from "./TimeDisplay";
 import { api, schemas } from "../client";
 import { z } from "zod";
 

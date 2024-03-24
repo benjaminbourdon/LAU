@@ -1,6 +1,6 @@
 import React from "react";
 import { PlayerRef } from "@remotion/player";
-import { useCurrentPlayerFrame } from "./use-current-player-frame";
+import { useCurrentPlayerFrame } from "../../remotion/use-current-player-frame";
 
 export default function TimeDisplay({
   playerRef,
