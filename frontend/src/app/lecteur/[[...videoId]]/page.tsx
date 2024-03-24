@@ -2,7 +2,7 @@ import InterractivePlayer from "@/components/InterractivePlayer";
 import type { Metadata } from "next";
 import { api, schemas } from "../../../client";
 import { z } from "zod";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "LAU",
@@ -14,7 +14,7 @@ const defaultVideoData: z.infer<typeof schemas.VideoOut> = {
   title: "Titre par défault",
 };
 
-export async function getVideoData(videoId: string) {
+async function getVideoData(videoId: string) {
   try {
     const videoData = await api.ReadVideoGet({
       params: {
