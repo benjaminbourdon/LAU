@@ -3,14 +3,15 @@
 import ActionButton from "@/components/ActionButton";
 import Input from "@/components/Input";
 import InputContainer from "@/components/InputContainer";
-import { Player, PlayerRef } from "@remotion/player";
+import { Player } from "@remotion/player";
 import { useParams, useRouter } from "next/navigation";
-import React, { useRef, useState } from "react";
+import React, { useContext, useState } from "react";
 
-import AugmentedVideo from "../../remotion/AugmentedVideo";
-import TimeDisplay from "./TimeDisplay";
-import { api, schemas } from "../client";
 import { z } from "zod";
+import AugmentedVideo from "../../remotion/AugmentedVideo";
+import { api, schemas } from "../client";
+import { PlayerContext } from "./PlayerContext";
+import TimeDisplay from "./TimeDisplay";
 
 export default function InterractivePlayer({
   initialData,
@@ -18,6 +19,7 @@ export default function InterractivePlayer({
   initialData?: z.infer<typeof schemas.VideoOut>;
 }) {
   const router = useRouter();
+  const playerRef = useContext(PlayerContext);
   const { videoId } = useParams<{ videoId?: Array<string> }>();
   const [title, setTitle] = useState<string>(
     initialData?.title ? initialData.title : "Pas de titre par défaut",
@@ -25,7 +27,6 @@ export default function InterractivePlayer({
   const [urlVideo, setUrlVideo] = useState<string>(
     initialData?.src ? initialData.src : "",
   );
-  const playerRef = useRef<PlayerRef>(null);
 
   const handleClick: React.MouseEventHandler = async () => {
     const data = { title: title, src: urlVideo };
