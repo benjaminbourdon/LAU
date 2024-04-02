@@ -1,6 +1,8 @@
 import Banner from "@/components/Banner";
 import { Providers } from "./providers";
 
+import "./globals.css";
+
 export default function RootLayout({
   children,
 }: {
@@ -9,10 +11,12 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body>
-        <Providers>
-          <Banner />
-          {children}
-        </Providers>
+        <main>
+          <Providers>
+            <Banner />
+            {children}
+          </Providers>
+        </main>
       </body>
     </html>
   );

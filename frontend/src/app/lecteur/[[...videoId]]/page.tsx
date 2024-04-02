@@ -37,7 +37,7 @@ export default async function Page({
     : defaultVideoData;
   return (
     <>
-      <h1>Lecteur augmenté</h1>
+      <h1 className="text-3xl">Lecteur augmenté</h1>
       <InterractivePlayer initialData={initialVideoData} />
     </>
   );

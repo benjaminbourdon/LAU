@@ -1,13 +1,12 @@
 "use client";
 
-import ActionButton from "@/components/ActionButton";
-import Input from "@/components/Input";
-import InputContainer from "@/components/InputContainer";
+import { Input } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { Player } from "@remotion/player";
 import { useParams, useRouter } from "next/navigation";
-import React, { useContext, useState } from "react";
-
+import React, { useContext, useMemo, useState } from "react";
 import { z } from "zod";
+
 import AugmentedVideo from "../../remotion/AugmentedVideo";
 import { api, schemas } from "../client";
 import { PlayerContext } from "./PlayerContext";
@@ -21,12 +20,20 @@ export default function InterractivePlayer({
   const router = useRouter();
   const playerRef = useContext(PlayerContext);
   const { videoId } = useParams<{ videoId?: Array<string> }>();
+
   const [title, setTitle] = useState<string>(
     initialData?.title ? initialData.title : "Pas de titre par défaut",
   );
   const [urlVideo, setUrlVideo] = useState<string>(
     initialData?.src ? initialData.src : "",
   );
+  const inputProps = useMemo(() => {
+    return {
+      titleText: title,
+      titleColor: "black",
+      urlVideo: urlVideo,
+    };
+  }, [title, urlVideo]);
 
   const handleClick: React.MouseEventHandler = async () => {
     const data = { title: title, src: urlVideo };
@@ -45,11 +52,7 @@ export default function InterractivePlayer({
       <Player
         ref={playerRef}
         component={AugmentedVideo}
-        inputProps={{
-          titleText: title,
-          titleColor: "black",
-          urlVideo: urlVideo,
-        }}
+        inputProps={inputProps}
         durationInFrames={1800}
         compositionWidth={1920}
         compositionHeight={1080}
@@ -61,11 +64,17 @@ export default function InterractivePlayer({
         controls
       />
       <TimeDisplay playerRef={playerRef} />
-      <InputContainer>
-        <Input text={title} setText={setTitle}></Input>
-        <Input text={urlVideo} setText={setUrlVideo}></Input>
-        <ActionButton text="Enregistrer" action={handleClick}></ActionButton>
-      </InputContainer>
+      <div>
+        <Input label="Titre" value={title} onValueChange={setTitle} />
+        <Input
+          label="URL de la vidéo"
+          value={urlVideo}
+          onValueChange={setUrlVideo}
+        />
+        <Button onClick={handleClick} color="primary">
+          Enregistrer
+        </Button>
+      </div>
     </>
   );
 }
