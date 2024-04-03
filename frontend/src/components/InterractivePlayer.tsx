@@ -1,7 +1,7 @@
 "use client";
 
-import { Input } from "@nextui-org/react";
-import { Button } from "@nextui-org/react";
+import { Input } from "@nextui-org/input";
+import { Button } from "@nextui-org/button";
 import { Player } from "@remotion/player";
 import { useParams, useRouter } from "next/navigation";
 import React, { useContext, useMemo, useState } from "react";
@@ -11,6 +11,7 @@ import AugmentedVideo from "../../remotion/AugmentedVideo";
 import { api, schemas } from "../client";
 import { PlayerContext } from "./PlayerContext";
 import TimeDisplay from "./TimeDisplay";
+import ScoreMenu from "./ScoreMenu";
 
 export default function InterractivePlayer({
   initialData,
@@ -66,6 +67,7 @@ export default function InterractivePlayer({
         />
         <TimeDisplay playerRef={playerRef} />
       </div>
+      <ScoreMenu />
       <div className="border-4 rounded p-2 m-2 grid gap-4">
         <Input label="Titre" value={title} onValueChange={setTitle} />
         <Input
