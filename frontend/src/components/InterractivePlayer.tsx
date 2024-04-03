@@ -48,23 +48,25 @@ export default function InterractivePlayer({
   };
 
   return (
-    <>
-      <Player
-        ref={playerRef}
-        component={AugmentedVideo}
-        inputProps={inputProps}
-        durationInFrames={1800}
-        compositionWidth={1920}
-        compositionHeight={1080}
-        fps={30}
-        style={{
-          width: 960,
-          height: 540,
-        }}
-        controls
-      />
-      <TimeDisplay playerRef={playerRef} />
-      <div>
+    <div className="w-min m-auto">
+      <div className="m-2 p-2">
+        <Player
+          ref={playerRef}
+          component={AugmentedVideo}
+          inputProps={inputProps}
+          durationInFrames={1800}
+          compositionWidth={1920}
+          compositionHeight={1080}
+          fps={30}
+          style={{
+            width: 960,
+            height: 540,
+          }}
+          controls
+        />
+        <TimeDisplay playerRef={playerRef} />
+      </div>
+      <div className="border-4 rounded p-2 m-2 grid gap-4">
         <Input label="Titre" value={title} onValueChange={setTitle} />
         <Input
           label="URL de la vidéo"
@@ -75,6 +77,6 @@ export default function InterractivePlayer({
           Enregistrer
         </Button>
       </div>
-    </>
+    </div>
   );
 }
