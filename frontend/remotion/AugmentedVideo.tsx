@@ -40,7 +40,7 @@ export default function AugmentedVideo({
     <AbsoluteFill style={{ backgroundColor: "grey" }}>
       <AbsoluteFill style={{ opacity }}>
         <AbsoluteFill>
-          <Video src={urlVideo} disablePictureInPicture />
+          <Video src={urlVideo} disablePictureInPicture pauseWhenBuffering />
         </AbsoluteFill>
 
         <Sequence from={35}>
