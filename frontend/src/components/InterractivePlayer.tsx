@@ -4,7 +4,7 @@ import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
 import { Player } from "@remotion/player";
 import { useParams, useRouter } from "next/navigation";
-import React, { useContext, useMemo, useState } from "react";
+import React, { useCallback, useContext, useMemo, useState } from "react";
 import { z } from "zod";
 
 import AugmentedVideo from "../../remotion/AugmentedVideo";
@@ -36,7 +36,7 @@ export default function InterractivePlayer({
     };
   }, [title, urlVideo]);
 
-  const handleClick: React.MouseEventHandler = async () => {
+  const onPressSaver = useCallback(async () => {
     const data = { title: title, src: urlVideo };
     if (videoId) {
       const res = await api.ReplaceVideoPut(data, {
@@ -46,7 +46,7 @@ export default function InterractivePlayer({
       const res = await api.CreateVideoPost(data);
       router.push("/lecteur/" + res.perma_token);
     }
-  };
+  }, [router, title, urlVideo, videoId]);
 
   return (
     <div className="w-min m-auto">
@@ -75,7 +75,7 @@ export default function InterractivePlayer({
           value={urlVideo}
           onValueChange={setUrlVideo}
         />
-        <Button onClick={handleClick} color="primary">
+        <Button onPress={onPressSaver} color="primary">
           Enregistrer
         </Button>
       </div>
