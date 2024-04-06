@@ -1,3 +1,5 @@
+from uuid import UUID, uuid4
+
 from pydantic import BaseModel, Field
 
 
@@ -11,8 +13,9 @@ class VideoIn(BaseVideo):
 
 
 class VideoDB(BaseVideo):
-    perma_token: str = Field(
-        default=None, title="Permanent ID of this augmented video object."
+    perma_token: UUID = Field(
+        default_factory=lambda: uuid4(),
+        title="Permanent ID of this augmented video object.",
     )
 
 

@@ -1,9 +1,10 @@
 import os
-from uuid import UUID, uuid4
+from uuid import UUID
 
 import uvicorn
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 
 from . import settings
@@ -27,8 +28,8 @@ app.add_middleware(
 async def create_video(
     collection: CollectionDep, session: SessionDep, new_video: VideoIn
 ) -> VideoOut:
-    document = VideoDB(**new_video.model_dump(), perma_token=str(uuid4()))
-    await collection.insert_one(document.model_dump(), session=session)
+    document = VideoDB(**new_video.model_dump())
+    await collection.insert_one(jsonable_encoder(document), session=session)
     return document
 
 
