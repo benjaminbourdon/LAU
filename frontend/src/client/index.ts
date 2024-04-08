@@ -1,7 +1,8 @@
-import { createApiClient } from "./generated-client";
+export { ApiError } from "./core/ApiError";
+export { CancelablePromise, CancelError } from "./core/CancelablePromise";
+export { OpenAPI } from "./core/OpenAPI";
+export type { OpenAPIConfig } from "./core/OpenAPI";
 
-const base_url = process.env.NEXT_PUBLIC_API_BASEURL
-  ? process.env.NEXT_PUBLIC_API_BASEURL
-  : "";
-export const api = createApiClient(base_url);
-export { schemas } from "./generated-client";
+export * from "./models";
+export * from "./schemas";
+export * from "./services";

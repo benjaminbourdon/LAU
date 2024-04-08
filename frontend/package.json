@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate-client": "openapi-zod-client ..\\api\\openapi\\openapi_simplify.json -o .\\src\\client\\generated-client.ts -p .\\.prettierrc --export-schemas --with-description"
+    "generate-client": "openapi-ts --input ..\\api\\openapi\\openapi_simplify.json -o .\\src\\client --client axios --base http://127.0.0.1:8001"
   },
   "dependencies": {
     "@nextui-org/react": "^2.2.9",
@@ -25,6 +25,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@hey-api/openapi-ts": "^0.34.5",
     "@react-types/shared": "^3.22.1",
     "@remotion/eslint-config": "4.0.135",
     "@remotion/zod-types": "4.0.135",
@@ -36,7 +37,6 @@
     "eslint-config-next": "14.0.3",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-react-app": "^7.0.1",
-    "openapi-zod-client": "^1.16.2",
     "postcss": "^8.4.31",
     "prettier": "3.1.0",
     "tailwindcss": "^3.3.5",

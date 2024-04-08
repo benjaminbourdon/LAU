@@ -132,6 +132,72 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
+      "Team": {
+        "properties": {
+          "name": { "type": "string", "maxLength": 30, "title": "Team's name" },
+          "color": {
+            "anyOf": [
+              { "type": "string", "maxLength": 15 },
+              { "type": "null" }
+            ],
+            "title": "Jersey's main color",
+            "examples": ["#294cbe"]
+          }
+        },
+        "type": "object",
+        "maxLength": 30,
+        "required": ["name"],
+        "title": "Team"
+      },
+      "Teams": {
+        "properties": {
+          "dark": {
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 30,
+                "title": "Team's name"
+              },
+              "color": {
+                "anyOf": [
+                  { "type": "string", "maxLength": 15 },
+                  { "type": "null" }
+                ],
+                "title": "Jersey's main color",
+                "examples": ["#294cbe"]
+              }
+            },
+            "type": "object",
+            "maxLength": 30,
+            "required": ["name"],
+            "title": "Dark team"
+          },
+          "light": {
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 30,
+                "title": "Team's name"
+              },
+              "color": {
+                "anyOf": [
+                  { "type": "string", "maxLength": 15 },
+                  { "type": "null" }
+                ],
+                "title": "Jersey's main color",
+                "examples": ["#294cbe"]
+              }
+            },
+            "type": "object",
+            "maxLength": 30,
+            "required": ["name"],
+            "title": "Light team"
+          }
+        },
+        "type": "object",
+        "required": ["dark", "light"],
+        "title": "Teams"
+      },
       "ValidationError": {
         "properties": {
           "loc": {
@@ -153,16 +219,18 @@
             "maxLength": 3000,
             "title": "Source video's url"
           },
-          "title": {
+          "teams": { "$ref": "#/components/schemas/Teams" },
+          "event": {
             "anyOf": [
               { "type": "string", "maxLength": 50 },
               { "type": "null" }
             ],
-            "title": "Video's title"
+            "title": "Context event of the game",
+            "examples": ["French championship 2024"]
           }
         },
         "type": "object",
-        "required": ["src"],
+        "required": ["src", "teams"],
         "title": "VideoIn"
       },
       "VideoOut": {
@@ -172,20 +240,23 @@
             "maxLength": 3000,
             "title": "Source video's url"
           },
-          "title": {
+          "teams": { "$ref": "#/components/schemas/Teams" },
+          "event": {
             "anyOf": [
               { "type": "string", "maxLength": 50 },
               { "type": "null" }
             ],
-            "title": "Video's title"
+            "title": "Context event of the game",
+            "examples": ["French championship 2024"]
           },
           "perma_token": {
             "type": "string",
+            "format": "uuid",
             "title": "Permanent ID of this augmented video object."
           }
         },
         "type": "object",
-        "required": ["src"],
+        "required": ["src", "teams"],
         "title": "VideoOut"
       }
     }
