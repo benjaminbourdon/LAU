@@ -23,7 +23,7 @@ export default function ScoreMenuElement({
           {point.end !== undefined ? "Fin : " + point.end + "\n" : null}
         </span>
         <span className="w-1/3">
-          {point.end !== undefined
+          {point.end !== undefined && point.scoringTeam !== undefined
             ? "Point marqué par " + point.scoringTeam
             : "Point non fini"}
         </span>

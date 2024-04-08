@@ -5,10 +5,9 @@ import { Button } from "@nextui-org/button";
 import { Player } from "@remotion/player";
 import { useParams, useRouter } from "next/navigation";
 import React, { useCallback, useContext, useMemo, useState } from "react";
-import { z } from "zod";
 
 import AugmentedVideo from "../../remotion/AugmentedVideo";
-import { api, schemas } from "../client";
+import { VideoService, VideoOut, Teams } from "../client";
 import { PlayerContext } from "./PlayerContext";
 import TimeDisplay from "./TimeDisplay";
 import ScoreMenu from "./ScoreMenu";
@@ -16,37 +15,54 @@ import ScoreMenu from "./ScoreMenu";
 export default function InterractivePlayer({
   initialData,
 }: {
-  initialData?: z.infer<typeof schemas.VideoOut>;
+  initialData?: VideoOut;
 }) {
   const router = useRouter();
   const playerRef = useContext(PlayerContext);
   const { videoId } = useParams<{ videoId?: Array<string> }>();
 
-  const [title, setTitle] = useState<string>(
-    initialData?.title ? initialData.title : "Pas de titre par défaut",
+  const [eventTitle, setEventTitle] = useState<string>(
+    initialData?.event ? initialData.event : "Pas de titre par défaut",
   );
   const [urlVideo, setUrlVideo] = useState<string>(
     initialData?.src ? initialData.src : "",
   );
+  const [teams, setTeams] = useState<Teams>(
+    initialData?.teams
+      ? initialData.teams
+      : {
+          dark: {
+            name: "Équipe sombre",
+            color: "black",
+          },
+          light: {
+            name: "Équipe claire",
+            color: "white",
+          },
+        },
+  );
+
   const inputProps = useMemo(() => {
     return {
-      titleText: title,
+      titleText: eventTitle,
       titleColor: "black",
       urlVideo: urlVideo,
+      teams: teams,
     };
-  }, [title, urlVideo]);
+  }, [eventTitle, urlVideo, teams]);
 
   const onPressSaver = useCallback(async () => {
-    const data = { title: title, src: urlVideo };
+    const data = { event: eventTitle, src: urlVideo, teams: teams };
     if (videoId) {
-      const res = await api.ReplaceVideoPut(data, {
-        params: { perma_token: videoId[0] },
+      VideoService.replaceVideoPut({
+        permaToken: videoId[0],
+        requestBody: data,
       });
     } else {
-      const res = await api.CreateVideoPost(data);
+      const res = await VideoService.createVideoPost({ requestBody: data });
       router.push("/lecteur/" + res.perma_token);
     }
-  }, [router, title, urlVideo, videoId]);
+  }, [router, eventTitle, urlVideo, videoId, teams]);
 
   return (
     <div className="w-min m-auto">
@@ -67,13 +83,39 @@ export default function InterractivePlayer({
         />
         <TimeDisplay playerRef={playerRef} />
       </div>
-      <ScoreMenu />
+      <ScoreMenu teams={teams} />
       <div className="border-4 rounded p-2 m-2 grid gap-4">
-        <Input label="Titre" value={title} onValueChange={setTitle} />
+        <Input
+          label="Nom de l'évènement "
+          value={eventTitle}
+          onValueChange={setEventTitle}
+        />
         <Input
           label="URL de la vidéo"
           value={urlVideo}
           onValueChange={setUrlVideo}
+        />
+        <Input
+          label={"Nom de l'équipe foncée "}
+          value={teams.dark.name}
+          onValueChange={(newValue) => {
+            // setTeams({
+            //   ...teams,
+            //   dark: { ...teams.dark, name: newValue },
+            // });
+            let newTeams: Teams = { ...teams };
+            newTeams.dark.name = newValue;
+            setTeams(newTeams);
+          }}
+        />
+        <Input
+          label={"Nom de l'équipe claire "}
+          value={teams.light.name}
+          onValueChange={(newValue) => {
+            let newTeams: Teams = { ...teams };
+            newTeams.light.name = newValue;
+            setTeams(newTeams);
+          }}
         />
         <Button onPress={onPressSaver} color="primary">
           Enregistrer

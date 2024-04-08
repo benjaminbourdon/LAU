@@ -8,20 +8,21 @@ import {
   Video,
 } from "remotion";
 import Title from "./Title";
-import { z } from "zod";
-import { zColor } from "@remotion/zod-types";
+import { Teams } from "@/client";
 
-export const videoMetadataSchema = z.object({
-  titleText: z.string(),
-  titleColor: zColor(),
-  urlVideo: z.string(),
-});
+type videoMetadataType = {
+  titleText: string;
+  titleColor: string;
+  urlVideo: string;
+  teams: Teams;
+};
 
 export default function AugmentedVideo({
   titleText,
   titleColor,
   urlVideo,
-}: z.infer<typeof videoMetadataSchema>) {
+  teams,
+}: videoMetadataType) {
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
 
@@ -43,8 +44,13 @@ export default function AugmentedVideo({
           <Video src={urlVideo} disablePictureInPicture pauseWhenBuffering />
         </AbsoluteFill>
 
-        <Sequence from={35}>
+        <Sequence from={35} durationInFrames={180}>
           <Title titleText={titleText} titleColor={titleColor} />
+        </Sequence>
+        <Sequence from={150}>
+          <p style={{ fontSize: 100 }}>
+            {teams.dark.name} contre {teams.light.name}
+          </p>
         </Sequence>
       </AbsoluteFill>
     </AbsoluteFill>

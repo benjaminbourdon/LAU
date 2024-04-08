@@ -1,7 +1,6 @@
 import InterractivePlayer from "@/components/InterractivePlayer";
 import type { Metadata } from "next";
-import { api, schemas } from "../../../client";
-import { z } from "zod";
+import { VideoService, VideoOut } from "../../../client";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -9,17 +8,25 @@ export const metadata: Metadata = {
   description: "",
 };
 
-const defaultVideoData: z.infer<typeof schemas.VideoOut> = {
+const defaultVideoData: VideoOut = {
   src: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-  title: "Titre par défault",
+  event: "Championnat",
+  teams: {
+    dark: {
+      name: "Équipe sombre",
+      color: "black",
+    },
+    light: {
+      name: "Équipe claire",
+      color: "white",
+    },
+  },
 };
 
 async function getVideoData(videoId: string) {
   try {
-    const videoData = await api.ReadVideoGet({
-      params: {
-        perma_token: videoId,
-      },
+    const videoData = await VideoService.readVideoGet({
+      permaToken: videoId,
     });
     return videoData;
   } catch (error) {

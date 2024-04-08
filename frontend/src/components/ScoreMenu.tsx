@@ -5,28 +5,28 @@ import React, {
   useMemo,
   useState,
 } from "react";
+
 import { useCurrentPlayerFrame } from "../../remotion/use-current-player-frame";
 import ScoreMenuElement from "./ScoreMenuElement";
 import { PlayerContext } from "./PlayerContext";
 import { Button, ButtonGroup } from "@nextui-org/button";
 import { PressEvent } from "@react-types/shared";
+import { Teams } from "@/client";
 
 export interface Point {
   id: ID;
   start: number;
   end?: number;
-  scoringTeam?: Team;
+  scoringTeam?: "dark" | "light";
 }
 
-type Team = string;
 type ID = number;
 
-export default function ScoreMenu() {
+export default function ScoreMenu({ teams }: { teams: Teams }) {
   const playerRef = useContext(PlayerContext);
   const frame = useCurrentPlayerFrame(playerRef);
   const [listPoints, setListPoints] = useState<Point[]>([]);
   const [displayedPointID, setDisplayedPointID] = useState<ID | null>(null);
-  const listTeams: string[] = ["Team A", "Team B"];
 
   useEffect(() => {
     const nearestBeforePoint = [...listPoints]
@@ -69,7 +69,8 @@ export default function ScoreMenu() {
                 e.target instanceof HTMLButtonElement &&
                 e.target.dataset.team
               ) {
-                point.scoringTeam = e.target.dataset.team;
+                point.scoringTeam =
+                  e.target.dataset.team === "dark" ? "dark" : "light";
               }
             }
             return point;
@@ -122,16 +123,20 @@ export default function ScoreMenu() {
           Débuter un point
         </Button>
         <ButtonGroup>
-          {listTeams.map((team) => (
-            <Button
-              key={team}
-              onPress={closeCurrentPoint}
-              data-team={team}
-              isDisabled={!isPointOpened || isPointClosed}
-            >
-              {"Point marqué par " + team}
-            </Button>
-          ))}
+          <Button
+            onPress={closeCurrentPoint}
+            data-team={"dark"}
+            isDisabled={!isPointOpened || isPointClosed}
+          >
+            {"Point marqué par " + teams.dark.name}
+          </Button>
+          <Button
+            onPress={closeCurrentPoint}
+            data-team={"light"}
+            isDisabled={!isPointOpened || isPointClosed}
+          >
+            {"Point marqué par " + teams.light.name}
+          </Button>
         </ButtonGroup>
       </div>
       <ul className="flex flex-col gap-1">
