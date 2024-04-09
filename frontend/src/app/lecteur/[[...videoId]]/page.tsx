@@ -1,26 +1,12 @@
 import InterractivePlayer from "@/components/InterractivePlayer";
 import type { Metadata } from "next";
-import { VideoService, VideoOut } from "../../../client";
+import { VideoService } from "../../../client";
 import { redirect } from "next/navigation";
+import { MetadataProvider } from "@/components/MetadataContext";
 
 export const metadata: Metadata = {
   title: "LAU",
   description: "",
-};
-
-const defaultVideoData: VideoOut = {
-  src: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-  event: "Championnat",
-  teams: {
-    dark: {
-      name: "Équipe sombre",
-      color: "black",
-    },
-    light: {
-      name: "Équipe claire",
-      color: "white",
-    },
-  },
 };
 
 async function getVideoData(videoId: string) {
@@ -41,11 +27,14 @@ export default async function Page({
 }) {
   const initialVideoData = params.videoId
     ? await getVideoData(params.videoId[0])
-    : defaultVideoData;
+    : undefined;
+
   return (
     <>
       <h1 className="text-3xl">Lecteur augmenté</h1>
-      <InterractivePlayer initialData={initialVideoData} />
+      <MetadataProvider initialValue={initialVideoData}>
+        <InterractivePlayer />
+      </MetadataProvider>
     </>
   );
 }
