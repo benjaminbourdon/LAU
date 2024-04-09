@@ -145,52 +145,17 @@
           }
         },
         "type": "object",
-        "maxLength": 30,
         "required": ["name"],
         "title": "Team"
       },
       "Teams": {
         "properties": {
           "dark": {
-            "properties": {
-              "name": {
-                "type": "string",
-                "maxLength": 30,
-                "title": "Team's name"
-              },
-              "color": {
-                "anyOf": [
-                  { "type": "string", "maxLength": 15 },
-                  { "type": "null" }
-                ],
-                "title": "Jersey's main color",
-                "examples": ["#294cbe"]
-              }
-            },
-            "type": "object",
-            "maxLength": 30,
-            "required": ["name"],
+            "allOf": [{ "$ref": "#/components/schemas/Team" }],
             "title": "Dark team"
           },
           "light": {
-            "properties": {
-              "name": {
-                "type": "string",
-                "maxLength": 30,
-                "title": "Team's name"
-              },
-              "color": {
-                "anyOf": [
-                  { "type": "string", "maxLength": 15 },
-                  { "type": "null" }
-                ],
-                "title": "Jersey's main color",
-                "examples": ["#294cbe"]
-              }
-            },
-            "type": "object",
-            "maxLength": 30,
-            "required": ["name"],
+            "allOf": [{ "$ref": "#/components/schemas/Team" }],
             "title": "Light team"
           }
         },
@@ -242,10 +207,8 @@
           },
           "teams": { "$ref": "#/components/schemas/Teams" },
           "event": {
-            "anyOf": [
-              { "type": "string", "maxLength": 50 },
-              { "type": "null" }
-            ],
+            "type": "string",
+            "maxLength": 50,
             "title": "Context event of the game",
             "examples": ["French championship 2024"]
           },
@@ -256,7 +219,7 @@
           }
         },
         "type": "object",
-        "required": ["src", "teams"],
+        "required": ["src", "teams", "event", "perma_token"],
         "title": "VideoOut"
       }
     }

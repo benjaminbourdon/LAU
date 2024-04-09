@@ -1,6 +1,14 @@
+from functools import partial
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
+
+EventField = partial(
+    Field,
+    title="Context event of the game",
+    max_length=50,
+    examples=["French championship 2024"],
+)
 
 
 class Team(BaseModel):
@@ -21,12 +29,7 @@ class Teams(BaseModel):
 class BaseVideo(BaseModel):
     src: str = Field(title="Source video's url", max_length=3000)
     teams: Teams = Field(strict=True)
-    event: str | None = Field(
-        default=None,
-        title="Context event of the game",
-        max_length=50,
-        examples=["French championship 2024"],
-    )
+    event: str | None = EventField(default=None)
 
 
 class VideoIn(BaseVideo):
@@ -36,10 +39,17 @@ class VideoIn(BaseVideo):
 class VideoDB(BaseVideo):
     perma_token: UUID = Field(
         default_factory=lambda: uuid4(),
+        serialization_alias="_id",
         title="Permanent ID of this augmented video object.",
         frozen=True,
     )
+    event: str = EventField(default="")
 
 
 class VideoOut(VideoDB):
-    pass
+    event: str = EventField()
+    perma_token: UUID = Field(
+        validation_alias="_id",
+        title="Permanent ID of this augmented video object.",
+        frozen=True,
+    )

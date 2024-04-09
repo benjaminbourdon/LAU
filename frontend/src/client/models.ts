@@ -8,14 +8,8 @@ export type Team = {
 };
 
 export type Teams = {
-  dark: {
-    name: string;
-    color?: string | null;
-  };
-  light: {
-    name: string;
-    color?: string | null;
-  };
+  dark: Team;
+  light: Team;
 };
 
 export type ValidationError = {
@@ -33,6 +27,6 @@ export type VideoIn = {
 export type VideoOut = {
   src: string;
   teams: Teams;
-  event?: string | null;
-  perma_token?: string;
+  event: string;
+  perma_token: string;
 };

@@ -34,47 +34,21 @@ export const $Team = {
 export const $Teams = {
   properties: {
     dark: {
-      properties: {
-        name: {
-          type: "string",
-          isRequired: true,
-          maxLength: 30,
+      type: "all-of",
+      contains: [
+        {
+          type: "Team",
         },
-        color: {
-          type: "any-of",
-          contains: [
-            {
-              type: "string",
-              maxLength: 15,
-            },
-            {
-              type: "null",
-            },
-          ],
-        },
-      },
+      ],
       isRequired: true,
     },
     light: {
-      properties: {
-        name: {
-          type: "string",
-          isRequired: true,
-          maxLength: 30,
+      type: "all-of",
+      contains: [
+        {
+          type: "Team",
         },
-        color: {
-          type: "any-of",
-          contains: [
-            {
-              type: "string",
-              maxLength: 15,
-            },
-            {
-              type: "null",
-            },
-          ],
-        },
-      },
+      ],
       isRequired: true,
     },
   },
@@ -146,19 +120,13 @@ export const $VideoOut = {
       isRequired: true,
     },
     event: {
-      type: "any-of",
-      contains: [
-        {
-          type: "string",
-          maxLength: 50,
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "string",
+      isRequired: true,
+      maxLength: 50,
     },
     perma_token: {
       type: "string",
+      isRequired: true,
       format: "uuid",
     },
   },

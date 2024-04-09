@@ -2,7 +2,7 @@ import os
 from typing import Annotated
 
 from dotenv import load_dotenv
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from motor.motor_asyncio import AsyncIOMotorClient as MongoClient
 from motor.motor_asyncio import AsyncIOMotorClientSession as ClientSession
 from motor.motor_asyncio import AsyncIOMotorCollection as Collection
@@ -15,7 +15,7 @@ DB_COLLECTION_NAME = os.getenv("DB_COLLECTION_NAME", default="")
 
 
 def get_mongo_connection():
-    mongo_client = MongoClient(MONGOBD_URI)
+    mongo_client = MongoClient(MONGOBD_URI, uuidRepresentation="standard")
     try:
         yield mongo_client
     finally:
@@ -46,7 +46,12 @@ CollectionDep = Annotated[Collection, Depends(get_mongo_collection)]
 async def get_mongo_session(
     mongo_client: MongoClientDep,
 ):
-    session = await mongo_client.start_session()
+    try:
+        session = await mongo_client.start_session()
+    except Exception as error:
+        msg = "Impossible de se connecter à la base de données."
+        raise HTTPException(status_code=500, detail=msg) from error
+
     try:
         yield session
     finally:

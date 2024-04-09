@@ -3,8 +3,7 @@ from uuid import UUID
 
 import uvicorn
 from dotenv import load_dotenv
-from fastapi import FastAPI
-from fastapi.encoders import jsonable_encoder
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from . import settings
@@ -28,16 +27,19 @@ app.add_middleware(
 async def create_video(
     collection: CollectionDep, session: SessionDep, new_video: VideoIn
 ) -> VideoOut:
-    document = VideoDB(**new_video.model_dump())
-    await collection.insert_one(jsonable_encoder(document), session=session)
-    return document
+    document = VideoDB(**new_video.model_dump(exclude_unset=True))
+    document_serialized = document.model_dump(by_alias=True)
+    await collection.insert_one(document_serialized, session=session)
+    return VideoOut(**document_serialized)
 
 
 @app.get("/video/{perma_token}", tags=["video"])
 async def read_video(
     collection: CollectionDep, session: SessionDep, perma_token: UUID
 ) -> VideoOut:
-    res = await collection.find_one({"perma_token": str(perma_token)}, session=session)
+    res = await collection.find_one({"_id": perma_token}, session=session)
+    if res is None:
+        raise HTTPException(status_code=404, detail="Video not found")
     return VideoOut(**res)
 
 
@@ -49,7 +51,7 @@ async def replace_video(
     updated_video: VideoIn,
 ) -> int:
     res = await collection.update_one(
-        {"perma_token": str(perma_token)},
+        {"_id": perma_token},
         {"$set": {**updated_video.model_dump()}},
         session=session,
     )
