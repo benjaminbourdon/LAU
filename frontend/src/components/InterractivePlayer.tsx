@@ -44,7 +44,7 @@ export default function InterractivePlayer() {
         />
         <TimeDisplay playerRef={playerRef} />
       </div>
-      <ScoreMenu teams={videoMetadata.teams} />
+      <ScoreMenu />
       <MetadataForm />
     </div>
   );
